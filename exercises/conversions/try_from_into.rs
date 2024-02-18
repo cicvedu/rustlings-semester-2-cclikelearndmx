@@ -27,7 +27,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation and return an Ok result of inner
 // type Color. You need to create an implementation for a tuple of three
@@ -41,6 +40,17 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        if let (x @ 0..=255, y @ 0..=255, z @ 0..=255) = tuple {
+            println!("All elements in the tuple are between 0 and 255: ({}, {}, {})", x, y, z);
+            Ok(Color {
+                red: x as u8,
+                green: y as u8,
+                blue: z as u8,
+            })
+        } else {
+            println!("At least one element in the tuple is not between 0 and 255");
+            Err(Self::Error::IntConversion)
+        }
     }
 }
 
@@ -48,6 +58,29 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let mut red;
+        let mut green;
+        let mut blue;
+        if arr[0] >= 0 && arr[0] <= 255{
+            red = arr[0] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        if arr[1] >= 0 && arr[1] <= 255{
+            green = arr[1] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        if arr[2] >= 0 && arr[2] <= 255{
+            blue = arr[2] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        Ok(Color {
+            red,
+            green,
+            blue,
+        })
     }
 }
 
@@ -55,6 +88,30 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        let mut red;
+        let mut green;
+        let mut blue;
+        if slice.len() != 3 { return Err(Self::Error::BadLen); }
+        if slice[0] >= 0 && slice[0] <= 255{
+            red = slice[0] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        if slice[1] >= 0 && slice[1] <= 255{
+            green = slice[1] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        if slice[2] >= 0 && slice[2] <= 255{
+            blue = slice[2] as u8;
+        } else {
+            return Err(Self::Error::IntConversion);
+        }
+        Ok(Color {
+            red,
+            green,
+            blue,
+        })
     }
 }
 

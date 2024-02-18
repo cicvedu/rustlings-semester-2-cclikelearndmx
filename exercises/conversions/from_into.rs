@@ -40,10 +40,45 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.is_empty() {
+            return Person::default();
+        }
+        if !s.contains(',') {
+            return Person::default();
+        }
+        let mut parts = s.split(',');
+        // 获取第一个部分作为字符串
+        let mut n = "".to_string();
+        if let Some(name) = parts.next() {
+            println!("Name: {}", name);
+            if name.is_empty() {
+                return Person::default();
+            }
+            n.push_str(name);
+        }
+
+        // 获取第二个部分并转换为usize类型
+        let mut age = 0usize;
+        if let Some(age_str) = parts.next() {
+            if let Ok(age_in) = age_str.trim().parse::<usize>() {
+                println!("Age: {}", age_in);
+                age = age_in;
+            } else {
+                println!("Failed to parse age as usize");
+                return Person::default();
+            }
+        }
+
+        if let Some(o) = parts.next() {
+            return Person::default()
+        }
+        Person {
+            name: n,
+            age: age
+        }
     }
 }
 
